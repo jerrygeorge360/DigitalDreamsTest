@@ -11,6 +11,7 @@ class Ball:
         self.vy = vy
 
     def move(self, dx, dy):
+        # dx and dy are incremental changes to position
         self.x += dx
         self.y += dy
 
@@ -18,6 +19,7 @@ class Ball:
         return (self.x, self.y)
     
     def elasticity(self):
+        # if it is 1, there is perpetual bouncing, if it is 0, there is no bounce at all
         return 0.8
 
     def apply_impulse(self, fx, fy):
@@ -30,6 +32,7 @@ class Ball:
         self.vy += ay * dt
 
     def update(self, dt):
+        # distance = velocity * time
         self.x += self.vx * dt
         self.y += self.vy * dt
 
@@ -54,13 +57,10 @@ class Force:
         fx = self.magnitude * math.cos(self.direction)
         fy = self.magnitude * math.sin(self.direction)
 
-        # convert force to acceleration and apply over time dt
+        # f=ma
         ax = fx / ball.mass
         ay = fy / ball.mass
         ball.apply_acceleration(ax, ay, dt)
-
-
-
 
 class rigidObject:
     def __init__(self, x, y, width, height):
@@ -76,7 +76,7 @@ class rigidObject:
         return (self.width, self.height)
     
     def is_colliding_with(self, ball):
-        # `Simple collision detection (AABB)
+        # Collision detection between ball and objects
         if (ball.x + ball.radius > self.x and
             ball.x - ball.radius < self.x + self.width and
             ball.y + ball.radius > self.y and
@@ -84,30 +84,3 @@ class rigidObject:
             return True
         return False
     
-
-
-def main():
-    ball1 = Ball(0, 10, 1)
-    appliedForce = Force(10, math.pi / 4)
-
-    dt = 0.05
-    steps = 0
-    max_steps = 1000
-    # apply the external force once as an initial impulse
-    appliedForce.apply_to(ball1, dt)
-    while steps < max_steps:
-        # gravity
-        ball1.apply_acceleration(0, -Ball.gravity, dt)
-        # physics update
-        ball1.update(dt)
-        print(ball1.get_position(), "vel=({:.2f},{:.2f})".format(ball1.vx, ball1.vy))
-        # stop when ball is resting on the ground
-        if ball1.y == 0 and abs(ball1.vy) < 0.1:
-            break
-        steps += 1
-
-    print("Ball has hit the ground and come to rest.")
-
-
-if __name__ == "__main__":
-    main()
