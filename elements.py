@@ -32,15 +32,14 @@ class Ball:
     def update(self, dt):
         self.x += self.vx * dt
         self.y += self.vy * dt
-        # simple ground collision at y = 0
+
         if self.y < 0:
             self.y = 0
-            # compute post-collision vertical velocity
             new_vy = -self.vy * self.elasticity()
-            # if the bounce is very small, stop vertical motion to avoid endless tiny bounces
+            # prevents perpetual bounces
             if abs(new_vy) < 0.1:
                 self.vy = 0
-                # apply ground friction when resting
+              # apply friction to horizontal component
                 self.vx *= 0.99
             else:
                 self.vy = new_vy

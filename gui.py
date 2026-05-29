@@ -53,7 +53,7 @@ def run():
     applied = Force(10, math.pi / 4)
 
     # wall height (meters)
-    wall_height_m = 12.0
+    wall_height_m = 15.0
 
     dt = 1.0 / 60.0
     # apply a single impulse at start
